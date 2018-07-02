@@ -9,7 +9,9 @@
         android:id="@+id/movie_review_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/recipe_image"
                 android:layout_width="wrap_content"
@@ -20,6 +22,8 @@
                 android:id="@+id/recipe_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 tools:text="recipe name" />
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

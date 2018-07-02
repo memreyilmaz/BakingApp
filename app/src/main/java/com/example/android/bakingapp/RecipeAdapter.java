@@ -10,15 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.model.Recipe;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdapterViewHolder> {
 
-    public static final String POSTER_PATH = "http://image.tmdb.org/t/p/w185//";
-    private List<Recipe> recipes;
-    private Recipe mRecipe;
+    private List<Recipe> mRecipes;
     private Context context;
     private RecipeAdapterOnClickHandler recipeAdapterOnClickHandler;
 
@@ -28,7 +25,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     public RecipeAdapter(List<Recipe> recipes, RecipeAdapterOnClickHandler recipeAdapterOnClickHandler) {
         this.recipeAdapterOnClickHandler = recipeAdapterOnClickHandler;
-        this.recipes = recipes;
+        this.mRecipes = recipes;
     }
 
     public class RecipeAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -46,7 +43,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
-            Recipe recipe = mRecipe.getRecipes().get(adapterPosition);
+            Recipe recipe = mRecipes.get(adapterPosition);
             recipeAdapterOnClickHandler.onClick(recipe);
         }
     }
@@ -63,25 +60,34 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
     @Override
     public void onBindViewHolder(RecipeAdapterViewHolder holder, int position) {
 
-        Recipe recipe = mRecipe.getRecipes().get(position);
-        String poster = POSTER_PATH + recipe.getPosterPath();
-        Picasso.with(context)
-                .load(poster)
-                .resize(506, 759)
-                .centerCrop()
-                .into(holder.recipeImageView);
+        Recipe recipe = mRecipes.get(position);
+        String recipeName = recipe.getName();
+        String imageUri = recipe.getImage();
+
+
+        /*Picasso.with(context)
+                .load(imageUri)
+                //.placeholder(getImageResourceId(recipeName))
+
+                //  .resize(506, 759)
+              //  .centerCrop()
+                .into(holder.recipeImageView);*/
 
         //TODO textview ve imageview set
+        holder.recipeImageView.setImageResource(R.drawable.nutellapie);
+
+        holder.recipeNameTextView.setText(recipeName);
+
     }
 
     @Override
     public int getItemCount() {
-        if (null == mRecipe) return 0;
-        return mRecipe.getRecipes().size();
+        if (null == mRecipes) return 0;
+        return mRecipes.size();
     }
 
     public List<Recipe> getRecipes() {
-        return recipes;
+        return mRecipes;
     }
 
     @Override
@@ -89,9 +95,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setRecipeData(Recipe recipe) {
-        mRecipe = movieResponse;
-        recipes = mRecipe.getRecipes();
+    public void setRecipeData(List<Recipe> recipes) {
+        mRecipes = recipes;
         notifyDataSetChanged();
     }
 }
