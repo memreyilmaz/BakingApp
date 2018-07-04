@@ -1,4 +1,4 @@
-package com.example.android.bakingapp;
+package com.example.android.bakingapp.adapters;
 
 
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
 
 import java.util.List;
@@ -35,8 +36,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
         public RecipeAdapterViewHolder(View view) {
             super(view);
-            recipeImageView = view.findViewById(R.id.recipe_image);
-            recipeNameTextView = view.findViewById(R.id.recipe_name);
+            recipeImageView = view.findViewById(R.id.recipe_image_imageview);
+            recipeNameTextView = view.findViewById(R.id.recipe_name_textview);
             view.setOnClickListener(this);
         }
 

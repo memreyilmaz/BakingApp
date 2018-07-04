@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 public class Recipe implements Parcelable
 {
@@ -45,11 +46,13 @@ public class Recipe implements Parcelable
     }
             ;
 
-    protected Recipe(Parcel in) {
+    private Recipe(Parcel in) {
         this.id = ((int) in.readValue((int.class.getClassLoader())));
         this.name = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.ingredients, (com.example.android.bakingapp.model.Ingredient.class.getClassLoader()));
-        in.readList(this.steps, (com.example.android.bakingapp.model.Step.class.getClassLoader()));
+        this.ingredients = new ArrayList<>();
+        in.readList(this.ingredients, Ingredient.class.getClassLoader());
+        this.steps = new ArrayList<>();
+        in.readList(this.steps, Step.class.getClassLoader());
         this.servings = ((int) in.readValue((int.class.getClassLoader())));
         this.image = ((String) in.readValue((String.class.getClassLoader())));
     }
