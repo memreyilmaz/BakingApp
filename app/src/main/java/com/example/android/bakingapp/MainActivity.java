@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     private RecipeAdapter mAdapter;
     public RecipeAdapter.RecipeAdapterOnClickHandler clickHandler;
     Context context;
-
+    public static final String DETAIL_KEY = "detail";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,15 +75,14 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     }
     @Override
     public void onClick(Recipe recipe) {
-        mCurrentRecipe = recipe;
-
-        Bundle recipeBundle = new Bundle();
-        ArrayList<Recipe> mCurrentRecipe = new ArrayList<>();
-        mCurrentRecipe.add(recipe);
-        recipeBundle.putParcelableArrayList("current_recipe", mCurrentRecipe);
-
         Intent intent = new Intent(this, StepsActivity.class);
-        intent.putExtras(recipeBundle);
+       mCurrentRecipe = recipe;
+        Bundle bundle = new Bundle();
+
+        bundle.putParcelable(DETAIL_KEY, mCurrentRecipe);
+
+        intent.putExtras(bundle);
         startActivity(intent);
+
     }
 }

@@ -2,12 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/recipe_detail_container"
     tools:context=".StepsActivity">
 
-    <fragment
-        android:id="@+id/fragment_steps"
-        android:name="com.example.android.bakingapp.fragments.StepsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
 
 </FrameLayout>

@@ -11,10 +11,11 @@ import android.widget.TextView;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Step;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapterViewHolder> {
-    private List<Step> mSteps;
+    private ArrayList<Step> mSteps;
     private Context context;
     private StepsAdapterOnClickHandler stepsAdapterOnClickHandler;
 
@@ -22,7 +23,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapter
         void onClick(Step step);
     }
 
-    public StepsAdapter(List<Step> steps, StepsAdapterOnClickHandler stepsAdapterOnClickHandler) {
+    public StepsAdapter(ArrayList<Step> steps, StepsAdapterOnClickHandler stepsAdapterOnClickHandler) {
         this.stepsAdapterOnClickHandler = stepsAdapterOnClickHandler;
         this.mSteps = steps;
     }
@@ -80,7 +81,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsAdapter
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setStepData(List<Step> steps) {
+    public void setStepData(ArrayList<Step> steps) {
         mSteps = steps;
         notifyDataSetChanged();
     }

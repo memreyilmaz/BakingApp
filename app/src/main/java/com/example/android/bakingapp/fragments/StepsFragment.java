@@ -17,18 +17,19 @@ import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
 import com.example.android.bakingapp.rest.RecipeInterface;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class StepsFragment extends Fragment implements StepsAdapter.StepsAdapterOnClickHandler{
     private TextView mEmptyStateTextView;
-    private List<Step> steps;
+    private ArrayList<Step> steps;
     //private List<Recipe> recipes;
     RecyclerView stepsListView;
     RecipeInterface apiService;
     private Step mCurrentStep;
     private Recipe mCurrentRecipe;
     private StepsAdapter mAdapter;
+
     public StepsAdapter.StepsAdapterOnClickHandler clickHandler;
     Context context;
     private StepsActivity parentActivity;
@@ -37,26 +38,53 @@ public class StepsFragment extends Fragment implements StepsAdapter.StepsAdapter
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
+       // View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
         parentActivity = (StepsActivity) getActivity();
-        Bundle recipeBundle = this.getArguments();
-        if (recipeBundle != null) {
-            steps = recipeBundle.getParcelableArrayList("steps");
-        }
-            stepsListView = rootView.findViewById(R.id.recipe_steps_recyclerview);
+       /* Bundle ingredientBundle = this.getArguments();
+        if (ingredientBundle != null) {
+            steps = ingredientBundle.getParcelableArrayList("steps");
+        }*/
+         /*   stepsListView = rootView.findViewById(R.id.recipe_steps_recyclerview);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(parentActivity);
             stepsListView.setLayoutManager(layoutManager);
             stepsListView.setHasFixedSize(true);
             mAdapter = new StepsAdapter(steps,this);
             stepsListView.setAdapter(mAdapter);
            // mEmptyStateTextView = rootView.findViewById(R.id.steps_empty_view);
-            mAdapter.setStepData(steps);
+            mAdapter.setStepData(steps);*/
+
+        View rootView=inflater.inflate(R.layout.fragment_recipe_steps,container,false);
 
 
+        /*mCurrentRecipe=getArguments().getParcelable("ingredientBundle");
+
+        steps=mCurrentRecipe.getSteps();
+
+        steps=new ArrayList<Step>(steps);
+
+        Bundle bundle1=new Bundle();
+
+
+// Get an ArrayList from a List
+        ArrayList<Step> steps1 = new ArrayList<>(steps);
+
+// Put the ArrayList in the Bundle
+        bundle1.putParcelableArrayList("stepsList", steps1);*/
+        LinearLayoutManager stepLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+       // LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
+        //mAdapter=new StepsAdapter(steps,this);
+        stepsListView=rootView.findViewById(R.id.recipe_steps_recyclerview);
+
+        stepsListView.setLayoutManager(stepLayoutManager);
+
+        stepsListView.setHasFixedSize(true);
         //mIngredients = mCurrentRecipe.getRecipeIngredients();
+        stepsListView.setAdapter(mAdapter);
+        //stepsListView.setLayoutManager(new LinearLayoutManager(context));
 
-       // mAdapter.notifyDataSetChanged();
+//         mAdapter.notifyDataSetChanged();
         /*apiService = Client.getClient().create(RecipeInterface.class);
 
         Call<ArrayList<Recipe>> call = apiService.getRecipe();
@@ -97,8 +125,17 @@ public class StepsFragment extends Fragment implements StepsAdapter.StepsAdapter
         //startActivity(intent);
     }
 
+    public void setRecipe(Recipe recipe) {
+        mCurrentRecipe = recipe;
+    }
+
+
     public StepsFragment() {
         // Required empty public constructor
+    }
+
+    public void setStepsAdapter(StepsAdapter adapter){
+        mAdapter = adapter;
     }
 
 
