@@ -5,6 +5,4 @@
     android:id="@+id/recipe_detail_container"
     tools:context=".StepsActivity">
 
-
-
 </FrameLayout>

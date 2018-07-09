@@ -45,7 +45,7 @@ public class StepsFragment extends Fragment implements StepsAdapter.StepsAdapter
 
         parentActivity = (StepsActivity) getActivity();
 
-        View rootView=inflater.inflate(R.layout.fragment_recipe_steps,container,false);
+        View rootView=inflater.inflate(R.layout.fragment_recipe_details,container,false);
 
         IngredientsAdapter ingredientAdapter = new IngredientsAdapter(ingredients);
         ingredientAdapter.setIngredientData(mCurrentRecipe.getIngredients());

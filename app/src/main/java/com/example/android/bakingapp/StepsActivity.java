@@ -38,12 +38,12 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
             if (mCurrentRecipe != null) {
                 setTitle(mCurrentRecipe.getName());
                 StepsFragment fragment = new StepsFragment();
-                StepsAdapter stepAdapter = new StepsAdapter(steps, this);
+                StepsAdapter stepsAdapter = new StepsAdapter(steps, this);
                 fragment.setRecipe(mCurrentRecipe);
-                stepAdapter.setStepData(mCurrentRecipe.getSteps());
-                fragment.setStepsAdapter(stepAdapter);
+                stepsAdapter.setStepData(mCurrentRecipe.getSteps());
+                fragment.setStepsAdapter(stepsAdapter);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.recipe_detail_container, fragment).commit();
+                        .add(R.id.recipe_detail_container, fragment).commit();
             }
         }
         /*Recipe selectedRecipe= getIntent().getExtras().getParcelable("key");
