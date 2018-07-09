@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     @Override
     public void onClick(Recipe recipe) {
         Intent intent = new Intent(this, StepsActivity.class);
-       mCurrentRecipe = recipe;
+        mCurrentRecipe = recipe;
         Bundle bundle = new Bundle();
 
         bundle.putParcelable(DETAIL_KEY, mCurrentRecipe);

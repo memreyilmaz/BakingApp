@@ -1,5 +1,6 @@
 package com.example.android.bakingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,9 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
     StepsFragment recipesStepsFragment;
     private FragmentManager mFragmentManager;
     private Recipe mCurrentRecipe;
+    private Step mCurrentStep;
+    public static final String STEP_DETAIL_KEY = "step_detail";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,14 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
 
     @Override
     public void onClick(Step step) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        mCurrentStep = step;
+        Bundle bundle = new Bundle();
+
+        bundle.putParcelable(STEP_DETAIL_KEY, mCurrentStep);
+
+        intent.putExtras(bundle);
+        startActivity(intent);
 
     }
 }
