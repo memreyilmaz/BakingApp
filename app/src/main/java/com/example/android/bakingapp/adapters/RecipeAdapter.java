@@ -74,19 +74,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
             holder.recipeImageView.setImageResource(setStockRecipeImage(recipeName));
 
         }
-
-        /*Picasso.with(context)
-                .load(imageUri)
-                //.placeholder(getImageResourceId(recipeName))
-
-                //  .resize(506, 759)
-              //  .centerCrop()
-                .into(holder.recipeImageView);*/
-
-        //holder.recipeImageView.setImageResource(R.drawable.nutellapie);
-
         holder.recipeNameTextView.setText(recipeName);
-
     }
 
     @Override
