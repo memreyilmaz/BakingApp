@@ -46,25 +46,6 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
                         .add(R.id.recipe_detail_container, fragment).commit();
             }
         }
-        /*Recipe selectedRecipe= getIntent().getExtras().getParcelable("key");
-
-        Bundle ingredientBundle=new Bundle();
-        ingredientBundle.putParcelable("ingredientBundle", selectedRecipe);
-
-        StepsFragment recipesStepsFragment=new StepsFragment();
-        recipesStepsFragment.setArguments(ingredientBundle);
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_steps,recipesStepsFragment,"step_fragment").commit();*/
-       /* if (getIntent().getExtras() != null) {
-            recipeBundle = getIntent().getExtras();
-            recipes = recipeBundle.getParcelableArrayList("current_recipe");
-        }
-
-        if ((recipes == null) ) return;
-        setTitle(recipes.get(0).getName());*/
-        //mFragmentManager = getSupportFragmentManager();
-       // recipesStepsFragment = (StepsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_steps);
     }
 
     @Override

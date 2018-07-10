@@ -3,7 +3,6 @@ package com.example.android.bakingapp.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -48,8 +47,8 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
     private Step mCurrentStep;
     private Recipe mCurrentRecipe;
     private String mVideoUrl;
-    private int stepId;
-    private int stepNr;
+    //private int stepId;
+    //private int stepNr;
     String mDetailedDescription;
     String mImageUrl;
     private StepsAdapter mAdapter;
@@ -58,8 +57,8 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
     private DetailActivity parentActivity;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
-    private FloatingActionButton nextButton;
-    private FloatingActionButton previousButton;
+    //private FloatingActionButton nextButton;
+    //private FloatingActionButton previousButton;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
 
@@ -71,9 +70,11 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
 
 
         View rootView=inflater.inflate(R.layout.fragment_recipe_steps,container,false);
-        nextButton = rootView.findViewById(R.id.recipe_next_button);
-        previousButton = rootView.findViewById(R.id.recipe_previous_button);
-        steps = mCurrentRecipe.getSteps();
+      //  nextButton = rootView.findViewById(R.id.recipe_next_button);
+      //  previousButton = rootView.findViewById(R.id.recipe_previous_button);
+      //  steps = mCurrentRecipe.getSteps();
+      //  stepNr = steps.size();
+      //  stepId = mCurrentStep.getId();
         mDetailedDescription = mCurrentStep.getDescription();
         stepsDetailTextView = rootView.findViewById(R.id.step_description_detail_textview);
         stepsDetailTextView.setText(mDetailedDescription);
@@ -83,7 +84,7 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
         initializeMediaSession();
 
         initializePlayer(Uri.parse(mVideoUrl));
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        /*nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (steps != null) {
@@ -98,10 +99,11 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
                         setStep(mCurrentStep);
                     }
                 }
-            }
-        });
 
-        previousButton.setOnClickListener(new View.OnClickListener() {
+            }
+        });*/
+
+        /*previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (steps != null) {
@@ -116,7 +118,7 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
                     }
                 }
             }
-        });
+        });*/
         //stepsListView.setLayoutManager(stepLayoutManager);
         //stepsListView.setHasFixedSize(true);
         //stepsListView.setAdapter(mAdapter);
