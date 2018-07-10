@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Ingredient;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         return new IngredientsAdapterViewHolder(view);
     }
 
-    public static String fmt(double ingredientQuantity)
+    public static String reformatquantity(double ingredientQuantity)
     {
         if(ingredientQuantity == (long) ingredientQuantity)
             return String.format("%d",(long)ingredientQuantity);
@@ -59,11 +61,12 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
         Ingredient ingredient = mIngredients.get(position);
         String ingredientDescription = ingredient.getIngredient();
+
         Double ingredientQuantity = ingredient.getQuantity();
         String ingredientMeasure = ingredient.getMeasure();
 
-        holder.ingredientNameTextView.setText(ingredientDescription);
-        holder.ingredientQuantityTextView.setText(fmt(ingredientQuantity));
+        holder.ingredientNameTextView.setText(StringUtils.capitalize(ingredientDescription));
+        holder.ingredientQuantityTextView.setText(reformatquantity(ingredientQuantity));
         holder.ingredientMeasureTextView.setText(ingredientMeasure);
 
     }

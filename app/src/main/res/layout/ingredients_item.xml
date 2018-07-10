@@ -24,6 +24,7 @@
                 android:id="@+id/recipe_ingredients_name_textview"
                 android:layout_width="0dp"
                 android:layout_weight="10"
+                android:textColor="@color/textColor"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textStyle="bold"
@@ -36,6 +37,7 @@
                 android:id="@+id/recipe_ingredients_quantity_textview"
                 android:layout_width="wrap_content"
                 android:layout_marginRight="2dp"
+                android:textColor="@color/textColor"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/recipe_ingredients_measure_textview"
@@ -47,6 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="measure"
+                android:textColor="@color/textColor"
                 android:layout_alignParentEnd="true"/>
             </RelativeLayout>
         </LinearLayout>

@@ -22,7 +22,7 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
     private Recipe mCurrentRecipe;
     private Step mCurrentStep;
     public static final String STEP_DETAIL_KEY = "step_detail";
-
+    public static final String RECIPE_DETAIL_KEY = "recipe_detail";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +71,11 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
     public void onClick(Step step) {
         Intent intent = new Intent(this, DetailActivity.class);
         mCurrentStep = step;
+
         Bundle bundle = new Bundle();
 
         bundle.putParcelable(STEP_DETAIL_KEY, mCurrentStep);
-
+        bundle.putParcelable(RECIPE_DETAIL_KEY, mCurrentRecipe);
         intent.putExtras(bundle);
         startActivity(intent);
 

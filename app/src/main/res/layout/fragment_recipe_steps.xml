@@ -12,11 +12,34 @@
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/recipe_description_video"
         android:layout_width="match_parent"
+        android:padding="8dp"
         android:layout_height="240dp"/>
     <TextView
         android:layout_width="wrap_content"
+        android:textColor="@color/textColor"
+        android:textAppearance="?android:textAppearanceLarge"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:id="@+id/step_description_detail_textview"
         tools:text="sadasddasdadadasdasdasd"/>
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/recipe_next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_navigate_next"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/recipe_previous_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/textColor"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_navigate_before"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"/>
 </RelativeLayout>

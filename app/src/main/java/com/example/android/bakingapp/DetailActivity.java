@@ -32,13 +32,14 @@ public class DetailActivity extends AppCompatActivity implements StepsAdapter.St
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mCurrentStep = extras.getParcelable(StepsActivity.STEP_DETAIL_KEY);
-
+            mCurrentRecipe = extras.getParcelable(StepsActivity.RECIPE_DETAIL_KEY);
             if (mCurrentStep != null) {
                 //setTitle(mCurrentStep.getDescription());
 
                 StepsDetailFragment fragment = new StepsDetailFragment();
                // StepsAdapter stepsAdapter = new StepsAdapter(steps, this);
                fragment.setStep(mCurrentStep);
+               fragment.setRecipe(mCurrentRecipe);
                // stepAdapter.setStepData(mCurrentRecipe.getSteps());
                // fragment.setStepsAdapter(stepAdapter);
                 getSupportFragmentManager().beginTransaction()
