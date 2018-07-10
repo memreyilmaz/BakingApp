@@ -47,6 +47,13 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         return new IngredientsAdapterViewHolder(view);
     }
 
+    public static String fmt(double ingredientQuantity)
+    {
+        if(ingredientQuantity == (long) ingredientQuantity)
+            return String.format("%d",(long)ingredientQuantity);
+        else
+            return String.format("%s",ingredientQuantity);
+    }
     @Override
     public void onBindViewHolder(IngredientsAdapterViewHolder holder, int position) {
 
@@ -56,10 +63,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         String ingredientMeasure = ingredient.getMeasure();
 
         holder.ingredientNameTextView.setText(ingredientDescription);
-        holder.ingredientQuantityTextView.setText(String.valueOf(ingredientQuantity));
+        holder.ingredientQuantityTextView.setText(fmt(ingredientQuantity));
         holder.ingredientMeasureTextView.setText(ingredientMeasure);
 
     }
+
 
     @Override
     public int getItemCount() {
