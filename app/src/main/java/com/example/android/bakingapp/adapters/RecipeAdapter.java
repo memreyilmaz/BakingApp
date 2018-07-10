@@ -3,6 +3,7 @@ package com.example.android.bakingapp.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -64,7 +66,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
         Recipe recipe = mRecipes.get(position);
         String recipeName = recipe.getName();
         String imageUri = recipe.getImage();
+        if (!TextUtils.isEmpty(imageUri)) {
+            Picasso.with(context)
+                    .load(imageUri)
+                    .into(holder.recipeImageView);
+        } else {
+            holder.recipeImageView.setImageResource(setStockRecipeImage(recipeName));
 
+        }
 
         /*Picasso.with(context)
                 .load(imageUri)
@@ -74,8 +83,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
               //  .centerCrop()
                 .into(holder.recipeImageView);*/
 
-        //TODO textview ve imageview set
-        holder.recipeImageView.setImageResource(R.drawable.nutellapie);
+        //holder.recipeImageView.setImageResource(R.drawable.nutellapie);
 
         holder.recipeNameTextView.setText(recipeName);
 
@@ -99,5 +107,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
     public void setRecipeData(List<Recipe> recipes) {
         mRecipes = recipes;
         notifyDataSetChanged();
+    }
+
+    public static int setStockRecipeImage(String recipeName) {
+        switch (recipeName){
+            case "Brownies":
+                return R.drawable.brownies;
+            case "Yellow Cake":
+                return R.drawable.yellowcake;
+            case "Nutella Pie":
+                return R.drawable.nutellapie;
+            case "Cheesecake":
+                return R.drawable.chesecake;
+            default:
+                return R.drawable.chesecake;
+        }
     }
 }
