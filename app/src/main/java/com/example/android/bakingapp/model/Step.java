@@ -55,14 +55,6 @@ public class Step implements Parcelable {
     public Step() {
     }
 
-    /**
-     *
-     * @param id
-     * @param shortDescription
-     * @param description
-     * @param videoURL
-     * @param thumbnailURL
-     */
     public Step(int id, String shortDescription, String description, String videoURL, String thumbnailURL) {
         super();
         this.id = id;

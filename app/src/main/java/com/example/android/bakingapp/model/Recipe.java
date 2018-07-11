@@ -63,15 +63,6 @@ public class Recipe implements Parcelable
     public Recipe() {
     }
 
-    /**
-     *
-     * @param ingredients
-     * @param id
-     * @param servings
-     * @param name
-     * @param image
-     * @param steps
-     */
     public Recipe(int id, String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, int servings, String image) {
         super();
         this.id = id;

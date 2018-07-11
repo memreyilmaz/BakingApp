@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
              @Override
              public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
-                 // Log.e(TAG, t.toString());
              }
          });
 

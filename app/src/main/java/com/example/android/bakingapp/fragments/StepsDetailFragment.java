@@ -38,6 +38,7 @@ import com.google.android.exoplayer2.util.Util;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("deprecation")
 public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsAdapterOnClickHandler, ExoPlayer.EventListener{
     private ArrayList<Step> steps;
     //private List<Recipe> recipes;
