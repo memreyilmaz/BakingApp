@@ -23,13 +23,19 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
     private Step mCurrentStep;
     public static final String STEP_DETAIL_KEY = "step_detail";
     public static final String RECIPE_DETAIL_KEY = "recipe_detail";
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steps);
 
-
+        if(findViewById(R.id.recipe_detail_container) != null) {
+            // This LinearLayout will only initially exist in the two-pane tablet case
+            mTwoPane = true;
+        } else {
+            mTwoPane =false;
+        }
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mCurrentRecipe = extras.getParcelable(MainActivity.DETAIL_KEY);
@@ -46,6 +52,48 @@ public class StepsActivity extends AppCompatActivity implements StepsAdapter.Ste
                         .add(R.id.recipe_detail_container, fragment).commit();
             }
         }
+
+       /* if (savedInstanceState == null) {
+            Bundle mRecipeBundle = new Bundle();
+            mRecipeBundle.putParcelableArrayList(RECIPE_DETAIL_KEY, mCurrentRecipe);
+            mRecipeBundle.putInt(STEP_DETAIL_KEY, mCurrentStep);
+            mRecipeBundle.putInt(Config.INTENT_KEY_STEP_COUNT, stepsCount);
+
+            if (mTwoPane) {
+
+                StepsFragment fragment = new StepsFragment();
+                //mRecipeBundle.putInt(Config.INTENT_KEY_SELECTED_STEP, 0);
+                fragment.setRecipe(mCurrentRecipe);
+
+                fragment.setArguments(mRecipeBundle);
+                mFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.recipe_detail_container, fragment)
+                   //     .addToBackStack(Config.STACK_RECIPE_DETAIL)
+                        .commit();
+
+                StepsDetailFragment recipeStepDetailFragment = new StepsDetailFragment();
+               // mRecipeBundle.putInt(Config.INTENT_KEY_SELECTED_STEP, 0);
+                fragment.setRecipe(mCurrentRecipe);
+
+//                recipeStepDetailFragment.setArguments(mRecipeBundle);
+                mFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.recipe_video_container, recipeStepDetailFragment)
+                 //       .addToBackStack(Config.STACK_RECIPE_STEP_DETAIL)
+                        .commit();
+
+            }/* else/* {
+
+                StepsFragment fragment = new StepsFragment();
+                fragment.setArguments(mRecipeBundle);
+                mFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.recipe_detail_container, fragment)
+                        .addToBackStack(Config.STACK_RECIPE_DETAIL)
+                        .commit();
+            }*/
+      //  }
     }
 
     @Override

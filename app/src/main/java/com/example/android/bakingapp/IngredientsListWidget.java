@@ -1,8 +1,10 @@
 package com.example.android.bakingapp;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 
 /**
@@ -17,6 +19,10 @@ public class IngredientsListWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_list_widget);
         views.setTextViewText(R.id.appwidget_text, widgetText);
+        Intent intent = new Intent(context, DetailActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+       // views.setOnClickPendingIntent(R.id.appwidget_ingredients_list, pendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
