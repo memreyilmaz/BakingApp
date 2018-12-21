@@ -1,6 +1,5 @@
 package com.example.android.bakingapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,8 +35,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     RecipeInterface apiService;
     private Recipe mCurrentRecipe;
     private RecipeAdapter mAdapter;
-    public RecipeAdapter.RecipeAdapterOnClickHandler clickHandler;
-    Context context;
     public static final String DETAIL_KEY = "detail";
     public static final String DETAIL_POSITION_KEY = "detail_position";
 

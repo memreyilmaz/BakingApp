@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 public class StepsFragment extends Fragment implements StepsAdapter.StepsAdapterOnClickHandler{
     private ArrayList<Step> steps;
-    //private List<Recipe> recipes;
     RecyclerView stepsListView;
     RecyclerView ingredientsListView;
     private Step mCurrentStep;

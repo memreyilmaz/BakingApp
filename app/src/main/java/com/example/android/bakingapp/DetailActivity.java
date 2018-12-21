@@ -9,17 +9,13 @@ import com.example.android.bakingapp.fragments.StepsFragment;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
 
-import java.util.ArrayList;
-
 public class DetailActivity extends AppCompatActivity implements FragmentInteractionListener{
-    private ArrayList<Recipe> recipes;
-    private ArrayList<Step> steps;
+
     StepsFragment stepsFragment;
     DetailFragment detailFragment;
     private Recipe mCurrentRecipe;
     private Bundle recipebundle;
     private Step mCurrentStep;
-    public static final String RECIPE_KEY = "recipe";
     public static final String STEP_DETAIL_KEY = "step_detail";
     public static final String RECIPE_DETAIL_KEY = "recipe_detail";
 
@@ -63,7 +59,6 @@ public class DetailActivity extends AppCompatActivity implements FragmentInterac
         stepsFragment.setRecipe(mCurrentRecipe);
         mFragmentManager.beginTransaction()
                 .add(R.id.recipe_detail_container, stepsFragment)
-                .addToBackStack(null)
                 .commit();
     }
     private void setDetailsFragmentForTablet() {
@@ -74,7 +69,6 @@ public class DetailActivity extends AppCompatActivity implements FragmentInterac
         detailFragment.setArguments(recipebundle);
         mFragmentManager.beginTransaction()
                 .add(R.id.recipe_video_container, detailFragment, FRAGMENT_DETAIL)
-                .addToBackStack(null)
                 .commit();
     }
     @Override
@@ -98,11 +92,6 @@ public class DetailActivity extends AppCompatActivity implements FragmentInterac
                     .commit();
         }
     }
-  /*  @Override
-    public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-    }*/
 
     @Override
     public void onBackPressed() {
