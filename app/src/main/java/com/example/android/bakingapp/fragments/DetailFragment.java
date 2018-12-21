@@ -3,6 +3,8 @@ package com.example.android.bakingapp.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -39,51 +41,66 @@ import java.util.ArrayList;
 
 
 @SuppressWarnings("deprecation")
-public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsAdapterOnClickHandler, ExoPlayer.EventListener{
+public class DetailFragment extends Fragment implements StepsAdapter.StepsAdapterOnClickHandler, ExoPlayer.EventListener{
     private ArrayList<Step> steps;
     //private List<Recipe> recipes;
-    private static final String TAG = StepsDetailFragment.class.getSimpleName();
+    private static final String TAG = DetailFragment.class.getSimpleName();
 
     TextView stepsDetailTextView;
     private Step mCurrentStep;
     private Recipe mCurrentRecipe;
     private String mVideoUrl;
-    //private int stepId;
-    //private int stepNr;
+    private int stepId;
+    private int stepNr;
     String mDetailedDescription;
     String mImageUrl;
     private StepsAdapter mAdapter;
     public StepsAdapter.StepsAdapterOnClickHandler clickHandler;
     private Context context;
-    private DetailActivity parentActivity;
+
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
-    //private FloatingActionButton nextButton;
-    //private FloatingActionButton previousButton;
+    private FloatingActionButton nextButton;
+    private FloatingActionButton previousButton;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
+    private long playerPosition;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        parentActivity = (DetailActivity) getActivity();
-
-
-        View rootView=inflater.inflate(R.layout.fragment_recipe_steps,container,false);
-      //  nextButton = rootView.findViewById(R.id.recipe_next_button);
-      //  previousButton = rootView.findViewById(R.id.recipe_previous_button);
-      //  steps = mCurrentRecipe.getSteps();
-      //  stepNr = steps.size();
-      //  stepId = mCurrentStep.getId();
-        mDetailedDescription = mCurrentStep.getDescription();
+        Bundle extras = getArguments();
+        if (extras != null) {
+            mCurrentStep = extras.getParcelable(DetailActivity.STEP_DETAIL_KEY);
+            mCurrentRecipe = extras.getParcelable(DetailActivity.RECIPE_DETAIL_KEY);
+         //   mCurrentRecipe = extras.getParcelable(DetailActivity.RECIPE_DETAIL_KEY_FOR_TABLET);
+        }
+        if (mCurrentStep == null){
+            steps = mCurrentRecipe.getSteps();
+            mCurrentStep = steps.get(0);
+        }
+        View rootView=inflater.inflate(R.layout.fragment_recipe_details,container,false);
+        nextButton = rootView.findViewById(R.id.recipe_next_button);
+        previousButton = rootView.findViewById(R.id.recipe_previous_button);
         stepsDetailTextView = rootView.findViewById(R.id.step_description_detail_textview);
-        stepsDetailTextView.setText(mDetailedDescription);
-        mVideoUrl = mCurrentStep.getVideoURL();
-        mImageUrl = mCurrentStep.getThumbnailURL();
         mPlayerView = rootView.findViewById(R.id.recipe_description_video);
+        //  steps = mCurrentRecipe.getSteps();
+        //  stepNr = steps.size();
+        //  stepId = mCurrentStep.getId();
+        //mDetailedDescription = mCurrentStep.getDescription();
+        getStepDetails();
+        stepsDetailTextView.setText(mDetailedDescription);
+        //mVideoUrl = mCurrentStep.getVideoURL();
+        //mImageUrl = mCurrentStep.getThumbnailURL();
         initializeMediaSession();
-
+       // setUi();
         initializePlayer(Uri.parse(mVideoUrl));
         /*nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +140,54 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
         //stepsListView.setLayoutManager(stepLayoutManager);
         //stepsListView.setHasFixedSize(true);
         //stepsListView.setAdapter(mAdapter);
+        steps = mCurrentRecipe.getSteps();
+        stepNr = steps.size();
+        stepId = mCurrentStep.getId();
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (steps != null) {
+                    int maxStepId = stepNr - 1;
+                    if (stepId < maxStepId) {
+                        int index = ++stepId;
+                        mCurrentStep = steps.get(index);
+                        getStepDetails();
+                        stepsDetailTextView.setText(mDetailedDescription);
+                        initializeMediaSession();
+                        initializePlayer(Uri.parse(mVideoUrl));
+                        //setStep(mCurrentStep);
+                    } else {
+                        stepId = 0;
+                        mCurrentStep = steps.get(stepId);
+                        setStep(mCurrentStep);
+                    }
+                }
 
+            }
+        });
+
+        previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (steps != null) {
+                    int totStepNo = stepNr - 1;
+                    if (stepId < totStepNo && stepId > 0) {
+                        int index = --stepId;
+                        mCurrentStep = steps.get(index);
+                        setStep(mCurrentStep);
+                        getStepDetails();
+                        stepsDetailTextView.setText(mDetailedDescription);
+                        initializeMediaSession();
+                        initializePlayer(Uri.parse(mVideoUrl));
+
+                    } else {
+                        mCurrentStep = steps.get(stepId);
+                        setStep(mCurrentStep);
+
+                    }
+                }
+            }
+        });
 
 
         return rootView;
@@ -131,29 +195,25 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
 
     @Override
     public void onClick(Step step) {
-        //  mCurrentRecipe = recipe;
-
-        //Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        //intent.putExtra(getResources().getString(R.string.parcel_movie), mCurrentMovie);
-
-        //startActivity(intent);
+        //
+    }
+    public void getStepDetails(){
+        mDetailedDescription = mCurrentStep.getDescription();
+        mVideoUrl = mCurrentStep.getVideoURL();
+        mImageUrl = mCurrentStep.getThumbnailURL();
     }
 
     public void setRecipe(Recipe recipe) {
         mCurrentRecipe = recipe;
     }
-
     public void setStep(Step step) {
         mCurrentStep = step;
     }
-
-    public StepsDetailFragment() {
+    public DetailFragment() {
     }
-
     public void setStepsAdapter(StepsAdapter adapter){
         mAdapter = adapter;
     }
-
     private void initializeMediaSession() {
 
         mMediaSession = new MediaSessionCompat(getContext(), TAG);
@@ -193,7 +253,6 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
             mExoPlayer.setPlayWhenReady(true);
         }
     }
-
     private class StepsVideoCallback extends MediaSessionCompat.Callback {
         @Override
         public void onPlay() {
@@ -210,64 +269,68 @@ public class StepsDetailFragment extends Fragment implements StepsAdapter.StepsA
             mExoPlayer.seekTo(0);
         }
     }
-
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-
     }
-
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
     }
-
     @Override
     public void onLoadingChanged(boolean isLoading) {
     }
-
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
     }
-
     @Override
     public void onRepeatModeChanged(int repeatMode) {
-
     }
-
     @Override
     public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
     }
-
     @Override
     public void onPlayerError(ExoPlaybackException error) {
     }
-
     @Override
     public void onPositionDiscontinuity(int reason) {
-
     }
-
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
     }
-
     @Override
     public void onSeekProcessed() {
-
     }
-
-
     private void releasePlayer() {
         mExoPlayer.stop();
         mExoPlayer.release();
         mExoPlayer = null;
     }
-
-    @Override
+    /*@Override
     public void onDestroy() {
         super.onDestroy();
         releasePlayer();
         mMediaSession.setActive(false);
+    }*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23 || mExoPlayer == null) {
+            initializeMediaSession();
+            initializePlayer(Uri.parse(mVideoUrl));
+        }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 }

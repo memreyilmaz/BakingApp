@@ -35,8 +35,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         public IngredientsAdapterViewHolder(View view) {
             super(view);
             ingredientNameTextView = view.findViewById(R.id.recipe_ingredients_name_textview);
-            ingredientQuantityTextView = view.findViewById(R.id.recipe_ingredients_quantity_textview);
-            ingredientMeasureTextView = view.findViewById(R.id.recipe_ingredients_measure_textview);
+            ingredientQuantityTextView = view.findViewById(R.id.recipe_ingredients_quantity_textview_for_widget);
+            ingredientMeasureTextView = view.findViewById(R.id.recipe_ingredients_measure_textview_for_widget);
         }
     }
 
@@ -68,16 +68,12 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         holder.ingredientNameTextView.setText(StringUtils.capitalize(ingredientDescription));
         holder.ingredientQuantityTextView.setText(reformatquantity(ingredientQuantity));
         holder.ingredientMeasureTextView.setText(ingredientMeasure);
-
     }
-
-
     @Override
     public int getItemCount() {
         if (null == mIngredients) return 0;
         return mIngredients.size();
     }
-
     public List<Ingredient> getIngredients() {
         return mIngredients;
     }

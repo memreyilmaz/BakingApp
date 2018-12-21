@@ -2,14 +2,18 @@ package com.example.android.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.adapters.RecipeAdapter;
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     public RecipeAdapter.RecipeAdapterOnClickHandler clickHandler;
     Context context;
     public static final String DETAIL_KEY = "detail";
+    public static final String DETAIL_POSITION_KEY = "detail_position";
 
     @Nullable
     private SimpleIdlingResource mIdlingResource;
@@ -54,9 +59,16 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         setContentView(R.layout.activity_main);
 
          recipeListView = findViewById(R.id.recipe_name_recyclerview);
-         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-         recipeListView.setLayoutManager(layoutManager);
-         recipeListView.setHasFixedSize(true);
+         if (findViewById(R.id.main_activity_tablet) != null){
+             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
+             recipeListView.setLayoutManager(layoutManager);
+             recipeListView.setHasFixedSize(true);
+         } else {
+             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+             recipeListView.setLayoutManager(layoutManager);
+             recipeListView.setHasFixedSize(true);
+         }
+
          mAdapter = new RecipeAdapter(recipes,this);
          recipeListView.setAdapter(mAdapter);
          mEmptyStateTextView = findViewById(R.id.empty_view);
@@ -67,38 +79,32 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
          call.enqueue(new Callback<ArrayList<Recipe>>() {
              @Override
              public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-             // Log.d(TAG, call.request().url().toString());
                  int statusCode = response.code();
                  recipes = response.body();
                  mAdapter.setRecipeData(recipes);
                  mAdapter.notifyDataSetChanged();
-
-             /*if (recipes.isEmpty()) {
-                 recipeListView.setVisibility(View.GONE);
-                 mEmptyStateTextView.setVisibility(View.VISIBLE);
-                 mEmptyStateTextView.setText(R.string.no_internet_connection);
-             } else {
-                 recipeListView.setVisibility(View.VISIBLE);
-                 mEmptyStateTextView.setVisibility(View.GONE);
-             }*/
              }
-
              @Override
              public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
+                 recipeListView.setVisibility(View.GONE);
+                 mEmptyStateTextView.setVisibility(View.VISIBLE);
              }
          });
-
     }
     @Override
-    public void onClick(Recipe recipe) {
-        Intent intent = new Intent(this, StepsActivity.class);
+    public void onClick(Recipe recipe, int position) {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(MainActivity.DETAIL_POSITION_KEY, position);
+        editor.apply();
+        IngredientsListWidget.sendUpdateBroadcast(this);
+
+        Intent intent = new Intent(this, DetailActivity.class);
         mCurrentRecipe = recipe;
         Bundle bundle = new Bundle();
-
         bundle.putParcelable(DETAIL_KEY, mCurrentRecipe);
-
         intent.putExtras(bundle);
         startActivity(intent);
-
     }
 }

@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:id="@+id/activity_steps_tablet"
     android:fillViewport="true"
     android:background="@color/backgroundColor"
-    tools:context=".StepsActivity">
+    tools:context=".DetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,11 +24,11 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray" />
 
         <FrameLayout
             android:id="@+id/recipe_video_container"
-            android:paddingLeft="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         </FrameLayout>

@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:paddingLeft="10dp"
-    android:paddingRight="6dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp">
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/recipe_ingredients_name_textview_for_widget"
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:textColor="@color/textColor"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp">
-            <TextView
-                android:id="@+id/recipe_ingredients_name_textview"
-                android:layout_width="0dp"
-                android:layout_weight="10"
-                android:textColor="@color/textColor"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceMedium"
-                tools:text="ingredient"/>
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="match_parent">
+            android:textAppearance="?android:textAppearanceMedium"
+            tools:text="ingredient"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent">
             <TextView
                 android:id="@+id/recipe_ingredients_quantity_textview_for_widget"
                 android:layout_width="wrap_content"
@@ -47,6 +39,5 @@
                 tools:text="measure"
                 android:textColor="@color/textColor"
                 android:layout_alignParentEnd="true"/>
-            </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
 </LinearLayout>

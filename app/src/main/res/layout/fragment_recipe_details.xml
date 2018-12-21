@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.StepsFragment">
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    tools:context=".fragments.DetailFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:layout_margin="8dp"
         android:orientation="vertical">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recipe_ingredients_recyclerview"
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/recipe_description_video"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recipe_steps_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
-
+        android:padding="8dp"
+        android:layout_height="240dp"/>
     <TextView
-        android:id="@+id/steps_empty_view"
+        android:layout_width="wrap_content"
+        android:textColor="@color/textColor"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:id="@+id/step_description_detail_textview"
+        tools:text="step explanation"/>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/recipe_next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:visibility="gone" />
-    </LinearLayout>
-</ScrollView>
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_navigate_next"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="24dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/recipe_previous_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_navigate_before"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="24dp"/>
+
+</RelativeLayout>

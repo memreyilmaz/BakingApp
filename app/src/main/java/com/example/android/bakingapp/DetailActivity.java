@@ -1,115 +1,117 @@
 package com.example.android.bakingapp;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
-import com.example.android.bakingapp.adapters.StepsAdapter;
-import com.example.android.bakingapp.fragments.StepsDetailFragment;
+import com.example.android.bakingapp.fragments.DetailFragment;
 import com.example.android.bakingapp.fragments.StepsFragment;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
 
 import java.util.ArrayList;
 
-public class DetailActivity extends AppCompatActivity implements StepsAdapter.StepsAdapterOnClickHandler{
-    private static final String TAG = StepsActivity.class.getSimpleName();
+public class DetailActivity extends AppCompatActivity implements FragmentInteractionListener{
     private ArrayList<Recipe> recipes;
-    private Bundle recipeBundle;
     private ArrayList<Step> steps;
-    StepsFragment recipesStepsFragment;
-    private FragmentManager mFragmentManager;
+    StepsFragment stepsFragment;
+    DetailFragment detailFragment;
     private Recipe mCurrentRecipe;
+    private Bundle recipebundle;
     private Step mCurrentStep;
-    private FloatingActionButton nextButton;
-    private FloatingActionButton previousButton;
+    public static final String RECIPE_KEY = "recipe";
+    public static final String STEP_DETAIL_KEY = "step_detail";
+    public static final String RECIPE_DETAIL_KEY = "recipe_detail";
 
-    private int stepId;
-    private int stepNr;
+    private FragmentManager mFragmentManager;
+    public static final String FRAGMENT_DETAIL = "step_detail_fragment";
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_steps);
 
+        if(findViewById(R.id.activity_steps_tablet) != null) {
+            mTwoPane = true;
+        } else {
+            mTwoPane =false;
+        }
+        mFragmentManager = getSupportFragmentManager();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mCurrentStep = extras.getParcelable(StepsActivity.STEP_DETAIL_KEY);
-            mCurrentRecipe = extras.getParcelable(StepsActivity.RECIPE_DETAIL_KEY);
-            if (mCurrentStep != null) {
-                //setTitle(mCurrentStep.getDescription());
-
-                StepsDetailFragment fragment = new StepsDetailFragment();
-               // StepsAdapter stepsAdapter = new StepsAdapter(steps, this);
-               fragment.setStep(mCurrentStep);
-               fragment.setRecipe(mCurrentRecipe);
-               // stepAdapter.setStepData(mCurrentRecipe.getSteps());
-               // fragment.setStepsAdapter(stepAdapter);
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.recipe_video_container, fragment).commit();
+            mCurrentRecipe = extras.getParcelable(MainActivity.DETAIL_KEY);
+        }
+        recipebundle = new Bundle();
+        if (mCurrentRecipe != null) {
+            setTitle(mCurrentRecipe.getName());
+        }
+        if (savedInstanceState == null) {
+            if (mTwoPane){
+                setStepsFragment();
+                setDetailsFragmentForTablet();
+            }else {
+                setStepsFragment();
             }
         }
-        steps = mCurrentRecipe.getSteps();
-        stepNr = steps.size();
-        stepId = mCurrentStep.getId();
-        nextButton = findViewById(R.id.recipe_next_button);
-        previousButton = findViewById(R.id.recipe_previous_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (steps != null) {
-                    int maxStepId = stepNr - 1;
-                    if (stepId < maxStepId) {
-                        int index = ++stepId;
-                        mCurrentStep = steps.get(index);
-                        StepsDetailFragment fragment = new StepsDetailFragment();
-                        fragment.setStep(mCurrentStep);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.recipe_video_container, fragment).commit();
-                    } else {
-                        stepId = 0;
-                        mCurrentStep = steps.get(stepId);
-                        StepsDetailFragment fragment = new StepsDetailFragment();
-                        fragment.setStep(mCurrentStep);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.recipe_video_container, fragment).commit();
-                    }
-                }
-
-            }
-        });
-
-        previousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (steps != null) {
-                    int totStepNo = stepNr - 1;
-                    if (stepId < totStepNo && stepId > 0) {
-                        int index = --stepId;
-                        mCurrentStep = steps.get(index);
-                        StepsDetailFragment fragment = new StepsDetailFragment();
-                        fragment.setStep(mCurrentStep);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.recipe_video_container, fragment).commit();
-                    } else {
-                        mCurrentStep = steps.get(stepId);
-                        StepsDetailFragment fragment = new StepsDetailFragment();
-                        fragment.setStep(mCurrentStep);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.recipe_video_container, fragment).commit();
-                    }
-                }
-            }
-        });
-
     }
+    public void setStepsFragment(){
+        recipebundle.putParcelable(RECIPE_DETAIL_KEY, mCurrentRecipe);
+        stepsFragment = new StepsFragment();
+        stepsFragment.setArguments(recipebundle);
+        stepsFragment.setRecipe(mCurrentRecipe);
+        mFragmentManager.beginTransaction()
+                .add(R.id.recipe_detail_container, stepsFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+    private void setDetailsFragmentForTablet() {
+        detailFragment = new DetailFragment();
+        mCurrentStep = mCurrentRecipe.getSteps().get(0);
+        recipebundle.putParcelable(RECIPE_DETAIL_KEY, mCurrentRecipe);
+        recipebundle.putParcelable(STEP_DETAIL_KEY, mCurrentStep);
+        detailFragment.setArguments(recipebundle);
+        mFragmentManager.beginTransaction()
+                .add(R.id.recipe_video_container, detailFragment, FRAGMENT_DETAIL)
+                .addToBackStack(null)
+                .commit();
+    }
+    @Override
+    public void onStepClicked(Step step) {
+        mCurrentStep = step;
+        recipebundle.putParcelable(STEP_DETAIL_KEY, mCurrentStep);
+        recipebundle.putParcelable(RECIPE_DETAIL_KEY, mCurrentRecipe);
 
+        if (!mTwoPane) {
+            detailFragment = new DetailFragment();
+            detailFragment.setArguments(recipebundle);
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.recipe_detail_container, detailFragment, FRAGMENT_DETAIL)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            detailFragment = new DetailFragment();
+            detailFragment.setArguments(recipebundle);
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.recipe_video_container, detailFragment, FRAGMENT_DETAIL)
+                    .commit();
+        }
+    }
+  /*  @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }*/
 
     @Override
-    public void onClick(Step step) {
+    public void onBackPressed() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
 
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 }

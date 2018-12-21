@@ -1,21 +1,38 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
-    android:padding="@dimen/widget_margin">
-
+    android:background="@android:color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_for_widget"
+    android:padding="8dp">
+    <LinearLayout
+        android:id="@+id/widget_data_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/recipe_name_textview_for_widget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/textColor"
+            android:layout_gravity="center_horizontal"
+            tools:text="Recipe name"/>
+        <ListView
+            android:clickable="false"
+            android:id="@+id/ingredients_list_view_for_widget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <TextView
-        android:id="@+id/appwidget_text"
+        android:id="@+id/empty_view_for_widget"
+        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:background="#09C"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:text="@string/no_internet_connection"/>
 
-</LinearLayout>
+</RelativeLayout>
