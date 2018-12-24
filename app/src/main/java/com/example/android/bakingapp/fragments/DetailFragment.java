@@ -3,6 +3,7 @@ package com.example.android.bakingapp.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -10,6 +11,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.DetailActivity;
@@ -35,6 +37,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -54,19 +57,28 @@ public class DetailFragment extends Fragment implements ExoPlayer.EventListener{
     String mImageUrl;
     private StepsAdapter mAdapter;
     private Context context;
-
+    ImageView noVideoImageView;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
 
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-    private long playerPosition;
+    private long mPlayerPosition;
+    private boolean isPlayWhenReady;
+    public static final String PLAYER_POSITION = "player_position";
+    public static final String PLAYER_STATE = "player_state";
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
+
+        if (savedInstanceState != null) {
+            mPlayerPosition = savedInstanceState.getLong(PLAYER_POSITION);
+            isPlayWhenReady = savedInstanceState.getBoolean(PLAYER_STATE);
+        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,18 +96,54 @@ public class DetailFragment extends Fragment implements ExoPlayer.EventListener{
         View rootView=inflater.inflate(R.layout.fragment_recipe_details,container,false);
 
         stepsDetailTextView = rootView.findViewById(R.id.step_description_detail_textview);
+        noVideoImageView = rootView.findViewById(R.id.no_video_imageview);
         mPlayerView = rootView.findViewById(R.id.recipe_description_video);
         getStepDetails();
         stepsDetailTextView.setText(mDetailedDescription);
 
-        initializeMediaSession();
-        initializePlayer(Uri.parse(mVideoUrl));
+        setPlayer();
 
         steps = mCurrentRecipe.getSteps();
         stepNr = steps.size();
         stepId = mCurrentStep.getId();
 
         return rootView;
+    }
+
+    private void setPlayer() {
+        String recipeName = mCurrentRecipe.getName();
+        int recipeImage = getStockRecipeImage(recipeName);
+        if (!mVideoUrl.equals("")) {
+            initializeMediaSession();
+            initializePlayer(Uri.parse(mVideoUrl));
+        } else {
+            mPlayerView.setVisibility(View.GONE);
+            noVideoImageView.setVisibility(View.VISIBLE);
+
+            if (!mImageUrl.equals("")) {
+                Picasso.with(getContext())
+                        .load(mImageUrl)
+                        .placeholder(recipeImage)
+                        .error(recipeImage)
+                        .into(noVideoImageView);
+            } else {
+                noVideoImageView.setImageResource(recipeImage);
+            }
+        }
+    }
+    public static int getStockRecipeImage(String recipeName) {
+        switch (recipeName){
+            case "Brownies":
+                return R.drawable.brownies;
+            case "Yellow Cake":
+                return R.drawable.yellowcake;
+            case "Nutella Pie":
+                return R.drawable.nutellapie;
+            case "Cheesecake":
+                return R.drawable.chesecake;
+            default:
+                return R.drawable.chesecake;
+        }
     }
 
     public void getStepDetails(){
@@ -151,7 +199,9 @@ public class DetailFragment extends Fragment implements ExoPlayer.EventListener{
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.setPlayWhenReady(isPlayWhenReady);
+            mExoPlayer.seekTo(mPlayerPosition);
+
         }
     }
     private class StepsVideoCallback extends MediaSessionCompat.Callback {
@@ -201,9 +251,12 @@ public class DetailFragment extends Fragment implements ExoPlayer.EventListener{
     public void onSeekProcessed() {
     }
     private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if (mExoPlayer != null) {
+            mPlayerPosition = mExoPlayer.getCurrentPosition();
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     @Override
@@ -217,6 +270,10 @@ public class DetailFragment extends Fragment implements ExoPlayer.EventListener{
     @Override
     public void onPause() {
         super.onPause();
+        if (mExoPlayer != null) {
+            mPlayerPosition = mExoPlayer.getCurrentPosition();
+            isPlayWhenReady = mExoPlayer.getPlayWhenReady();
+        }
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -227,5 +284,12 @@ public class DetailFragment extends Fragment implements ExoPlayer.EventListener{
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(PLAYER_POSITION, mPlayerPosition);
+        outState.putBoolean(PLAYER_STATE, isPlayWhenReady);
     }
 }

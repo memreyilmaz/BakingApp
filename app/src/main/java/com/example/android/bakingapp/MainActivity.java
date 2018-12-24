@@ -50,12 +50,14 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         return mIdlingResource;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getIdlingResource();
 
-         recipeListView = findViewById(R.id.recipe_name_recyclerview);
+        recipeListView = findViewById(R.id.recipe_name_recyclerview);
          if (findViewById(R.id.main_activity_tablet) != null){
              RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
              recipeListView.setLayoutManager(layoutManager);
@@ -70,8 +72,10 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
          recipeListView.setAdapter(mAdapter);
          mEmptyStateTextView = findViewById(R.id.empty_view);
 
-         apiService = Client.getClient().create(RecipeInterface.class);
-
+        apiService = Client.getClient().create(RecipeInterface.class);
+        if(mIdlingResource!=null){
+            mIdlingResource.setIdleState(false);
+        }
          Call<ArrayList<Recipe>> call = apiService.getRecipe();
          call.enqueue(new Callback<ArrayList<Recipe>>() {
              @Override
@@ -80,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                  recipes = response.body();
                  mAdapter.setRecipeData(recipes);
                  mAdapter.notifyDataSetChanged();
+                 if (mIdlingResource != null) {
+                     mIdlingResource.setIdleState(true);
+                 }
              }
              @Override
              public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                  mEmptyStateTextView.setVisibility(View.VISIBLE);
              }
          });
+
     }
     @Override
     public void onClick(Recipe recipe, int position) {

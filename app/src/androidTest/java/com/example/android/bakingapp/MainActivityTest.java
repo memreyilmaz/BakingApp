@@ -23,11 +23,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    private IdlingResource mIdlingResource;
     private final static String SAMPLE_RECIPE_NAME = "Yellow Cake";
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    private IdlingResource mIdlingResource;
+
 
     @Before
     public void registerIdlingResource() {
@@ -38,10 +40,11 @@ public class MainActivityTest {
     @Test
     public void testRecipeName() {
 
-        onView(withId(R.id.recipe_name_recyclerview)).perform(RecyclerViewActions.scrollToPosition(2));
+        onView(withId(R.id.recipe_name_recyclerview))
+                .perform(RecyclerViewActions.scrollToPosition(2));
 
         onView(withText(SAMPLE_RECIPE_NAME))
-                .check(matches(isDisplayed()));
+           .check(matches(isDisplayed()));
     }
 
     @Test
@@ -50,7 +53,8 @@ public class MainActivityTest {
          * Clicks on a recyclerview item and checks it opens up the stepsactivity with the correct details.
          */
         onView(withId(R.id.recipe_name_recyclerview))
-                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(SAMPLE_RECIPE_NAME)), click()));
+                .perform(RecyclerViewActions
+                .actionOnItem(hasDescendant(withText(SAMPLE_RECIPE_NAME)), click()));
 
         onView(withId(R.id.recipe_ingredients_recyclerview))
                 .check(matches(isDisplayed()));
